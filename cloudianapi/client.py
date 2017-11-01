@@ -37,7 +37,7 @@ class CloudianAPIClient(object):
         self.user = user
         self.key = key
 
-        # CloudianAPIClient has a REST manager:
+        # CloudianAPIClient has a private REST manager:
         self._rest_client = CloudianREST(self.url,
                                          self.port,
                                          self.user,
