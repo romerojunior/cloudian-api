@@ -43,7 +43,7 @@ class CloudianREST:
         :param api_user:    admin API user configured on your cluster
         :type api_user:     str
         :param api_key:     API key configured on your cluster
-        :type api_key:      int
+        :type api_key:      str
         :rtype:             CloudianREST
         """
         self.admin_url = admin_url
