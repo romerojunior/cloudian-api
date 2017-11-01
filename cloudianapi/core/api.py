@@ -116,6 +116,4 @@ class BaseComponent(object):
                 symbol=symbol, key=key, value=value
             )
 
-        print api_call
-
         return self.rest_client.http_get(api_call)
