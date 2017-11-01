@@ -108,14 +108,14 @@ class BaseComponent(object):
             endpoint=endpoint
         )
 
-        if 'nodeId' in kwargs.keys():
-            api_call += '?nodeId={node_id}'.format(
-                node_id=kwargs['nodeId']
+        for index, (key, value) in enumerate(kwargs.items()):
+
+            symbol = '&' if index else '?'
+
+            api_call += '{symbol}{key}={value}'.format(
+                symbol=symbol, key=key, value=value
             )
 
-        if 'region' in kwargs.keys():
-            api_call += '?region={region}'.format(
-                region=kwargs['region']
-            )
+        print api_call
 
         return self.rest_client.http_get(api_call)
