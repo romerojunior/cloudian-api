@@ -25,5 +25,5 @@
 from cloudianapi.core.api import BaseComponent
 
 
-class Usage(BaseComponent):
-    base_url = 'usage'
+class RatingPlan(BaseComponent):
+    base_url = 'ratingPlan'

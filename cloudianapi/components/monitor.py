@@ -22,43 +22,8 @@
 
 #      Romero Galiza Jr. - rgaliza@schubergphilis.com
 
-from cloudianapi.core.api import CloudianREST
+from cloudianapi.core.api import BaseComponent
 
 
-class Monitor(CloudianREST):
-
+class Monitor(BaseComponent):
     base_url = 'monitor'
-
-    def __getattr__(self, endpoint):
-
-        def handler(**kwargs):
-            return self._inner_getattr(endpoint, **kwargs)
-        return handler
-
-    def _inner_getattr(self, endpoint, **kwargs):
-
-        api_call = '/{base_url}/{endpoint}'.format(
-            base_url=Monitor.base_url,
-            endpoint=endpoint
-        )
-
-        if 'nodeId' in kwargs.keys():
-            api_call += '?nodeId={node_id}'.format(
-                node_id=kwargs['nodeId']
-            )
-
-        if 'region' in kwargs.keys():
-            api_call += '?region={region}'.format(
-                region=kwargs['region']
-            )
-
-        return self.http_get(api_call)
-
-
-if __name__ == '__main__':
-
-    api_url = "http://admin.storage.acc.schubergphilis.com"
-    api_port = 18081
-    api_user = "apiuser"
-    api_key = "OI7ELeGsw2"
-

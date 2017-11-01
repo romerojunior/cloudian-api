@@ -22,10 +22,8 @@
 
 #      Romero Galiza Jr. - rgaliza@schubergphilis.com
 
-from cloudianapi.core.api import CloudianREST
+from cloudianapi.core.api import BaseComponent
 
 
-class System(CloudianREST):
-
-    def __init__(self):
-        pass
+class System(BaseComponent):
+    base_url = 'system'

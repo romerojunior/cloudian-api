@@ -23,12 +23,11 @@
 #      Romero Galiza Jr. - rgaliza@schubergphilis.com
 
 
-from requests import get, exceptions
-from requests.packages import urllib3
-import exceptions
+import requests
+import urllib3
 
 
-class CloudianREST:
+class CloudianREST(object):
 
     """Defines a basic REST API client to be extended by components."""
 
@@ -62,8 +61,15 @@ class CloudianREST:
         urllib3.disable_warnings()
 
         try:
-            response = get(self.admin_url + ':' + str(self.port) + call_str,
-                           verify=False,  auth=(self.api_user, self.api_key))
+            api_call = '{admin_url}:{port}/{call}'.format(
+                admin_url=self.admin_url,
+                port=self.port,
+                call=call_str
+            )
+
+            response = requests.get(api_call, verify=False,
+                                    auth=(self.api_user, self.api_key)
+                                    )
 
             if response.status_code == 200:
                 return response.json()
@@ -77,6 +83,39 @@ class CloudianREST:
             print("Error: " + str(err.message))
             exit(1)
 
-        except exceptions.ConnectionError as err:
+        except urllib3.exceptions.ConnectionError as err:
             print("Error: " + str(err.message))
             exit(1)
+
+
+class BaseComponent(object):
+
+    base_url = None
+
+    def __init__(self, rest_client):
+        self.rest_client = rest_client
+
+    def __getattr__(self, endpoint):
+
+        def handler(**kwargs):
+            return self._inner_getattr(endpoint, **kwargs)
+        return handler
+
+    def _inner_getattr(self, endpoint, **kwargs):
+
+        api_call = '/{base_url}/{endpoint}'.format(
+            base_url=self.__class__.base_url,
+            endpoint=endpoint
+        )
+
+        if 'nodeId' in kwargs.keys():
+            api_call += '?nodeId={node_id}'.format(
+                node_id=kwargs['nodeId']
+            )
+
+        if 'region' in kwargs.keys():
+            api_call += '?region={region}'.format(
+                region=kwargs['region']
+            )
+
+        return self.rest_client.http_get(api_call)

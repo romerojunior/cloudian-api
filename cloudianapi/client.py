@@ -25,12 +25,26 @@
 from cloudianapi.components.monitor import *
 from cloudianapi.components.system import *
 from cloudianapi.components.usage import *
+from cloudianapi.core.api import CloudianREST
 
 
-class CloudianAPI(object):
+class CloudianAPIClient(object):
 
-    def __init__(self):
-        self.monitor = Monitor()
-        self.usage = Usage()
-        self.qos = System()
+    def __init__(self, url, port, user, key):
+
+        self.url = url
+        self.port = port
+        self.user = user
+        self.key = key
+
+        # CloudianAPIClient has a REST manager:
+        self._rest_client = CloudianREST(self.url,
+                                         self.port,
+                                         self.user,
+                                         self.key)
+
+        # CloudianAPIClient has components:
+        self.monitor = Monitor(self._rest_client)
+        self.usage = Usage(self._rest_client)
+        self.system = System(self._rest_client)
 
