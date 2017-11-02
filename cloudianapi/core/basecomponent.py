@@ -38,6 +38,17 @@ class BaseComponent(object):
         """
         self.requestor = requestor
 
+    def __call__(self, **parameters):
+        """ Gets a properly built request and queries the Requestor.
+
+        :param parameters:  URL query parameters
+        :type parameters:   dict
+        :rtype:             BaseComponent
+        """
+        api_call = self._build_request(**parameters)
+
+        return self.requestor.http_get(api_call)
+
     def __getattr__(self, endpoint):
         # closure, expects keyword argument unpacking:
         def handler(**parameters):
@@ -45,8 +56,7 @@ class BaseComponent(object):
         return handler
 
     def _inner_getattr(self, endpoint, **parameters):
-        """ Fetches the API endpoints and all URL parameters in order to
-        construct a valid Cloudian Admin API call.
+        """ Gets a properly built request and queries the Requestor.
 
         :param endpoint:    the endpoint path (without parameters)
         :type endpoint:     str
@@ -54,17 +64,35 @@ class BaseComponent(object):
         :type parameters:   dict
         :rtype:             BaseComponent
         """
-        api_call = '/{base_url}/{endpoint}'.format(
-            base_url=self.__class__.base_url,
-            endpoint=endpoint
-        )
-
-        for index, (key, value) in enumerate(parameters.items()):
-            # builds a valid API call with proper URL syntax:
-            symbol = '&' if index else '?'
-
-            api_call += '{symbol}{key}={value}'.format(
-                symbol=symbol, key=key, value=value
-            )
+        api_call = self._build_request(endpoint, **parameters)
 
         return self.requestor.http_get(api_call)
+
+    def _build_request(self, endpoint='', **parameters):
+        """ Builds a proper API request.
+
+        :param endpoint:    the endpoint path (without parameters)
+        :type endpoint:     str
+        :param parameters:  URL query parameters
+        :type parameters:   dict
+        :rtype:             str
+        """
+
+        base_url = self.__class__.base_url
+
+        if endpoint:
+            api_call = '{base_url}/{endpoint}'.format(
+                base_url=base_url,
+                endpoint=endpoint
+            )
+        else:
+            api_call = '{base_url}'.format(
+                base_url=base_url,
+            )
+
+        for index, (key, value) in enumerate(parameters.items()):
+            api_call += '{symbol}{key}={value}'.format(
+                symbol='&' if index else '?', key=key, value=value
+            )
+
+        return api_call
