@@ -34,10 +34,33 @@ if __name__ == "__main__":
         port=8080
     )
 
-    print client.monitor.host(nodeId="node01")
+    # Parameters such as nodeId, region, userType and so on are case sensitive,
+    # check your Cloudian (TM) Admin API documentation for more details.
+
+    # Print dict containing all nodes:
     print client.monitor.nodelist()
+
+    # Print details about a given node:
+    print client.monitor.host(nodeId="node01")
+
+    # Print all events of a given node from a specific region:
     print client.monitor.events(nodeId="node01", region="eu-west-1")
+
+    # Print notification rules for a given region:
     print client.monitor.notificationrules(region="eu-west-1")
+
+    # Print license details:
     print client.system.license()
+
+    # Print all user groups:
     print client.group.list()
+
+    # Print a list of active users from a given user group:
     print client.user.list(groupId="ABC", userType="all", userStatus="active")
+
+    # Print all nodes from a given region and their respective used capacity:
+    for node in client.monitor.nodelist(region="eu-west-1"):
+        print '{node}: {value} KB used'.format(
+            value=client.monitor.host(nodeId=node)['diskUsedKb']['value'],
+            node=node
+        )
