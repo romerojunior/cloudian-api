@@ -27,7 +27,7 @@ from setuptools import setup, find_packages
 setup(
     name='cloudianapi',
     version='0.1.0',
-    description='Cloudian (TM) REST Admin API Client',
+    description='Non-official Cloudian (TM) REST Admin API Client',
     author='Romero Galiza Jr',
     author_email='rgaliza@schubergphilis.com',
     url='https://github.com/romerojunior/cloudian-api',
