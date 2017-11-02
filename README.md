@@ -1,7 +1,7 @@
-WiP: Cloudian Rest API Client
+WiP: Cloudian™ Rest API Client
 ========================
 
-Usage
+Example
 -----
 
 ```
@@ -27,6 +27,10 @@ Work in Progress
 
 This python package is a working in progress, still not suitable for production. Feel free to contribute by either making a PR or creating a new issue.
 
+How it works
+------------
+
+All Cloudian™ Hyperstore Admin API endpoints are dynamically mapped through `cloudianapi.components` package, however, currently only the HTTP GET method is supported (DELETE and POST methods are expected to be implemented soon). Each call, such as `client.monitor.nodelist()`, returns a JSON encoded string that could easily be parsed to any data structure.
 
 Fix me & To do
 --------------
