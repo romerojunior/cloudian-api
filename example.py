@@ -52,8 +52,8 @@ if __name__ == "__main__":
     # Print license details:
     print client.system.license()
 
-    # Print all user groups:
-    print client.group.list()
+    # Print details about a given group:
+    print client.group(groupId='ABC')
 
     # Print a list of active users from a given user group:
     print client.user.list(groupId="ABC", userType="all", userStatus="active")
