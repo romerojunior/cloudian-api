@@ -22,19 +22,19 @@
 
 #      Romero Galiza Jr. - rgaliza@schubergphilis.com
 
-from cloudianapi.components.billing import *
-from cloudianapi.components.bppolicy import *
-from cloudianapi.components.group import *
-from cloudianapi.components.monitor import *
-from cloudianapi.components.qos import*
-from cloudianapi.components.ratingplan import *
-from cloudianapi.components.system import *
-from cloudianapi.components.tiering import *
-from cloudianapi.components.usage import *
-from cloudianapi.components.user import *
-from cloudianapi.components.whitelist import *
+from cloudianapi.components.billing import Billing
+from cloudianapi.components.bppolicy import BucketPolicy
+from cloudianapi.components.group import Group
+from cloudianapi.components.monitor import Monitor
+from cloudianapi.components.qos import Qos
+from cloudianapi.components.ratingplan import RatingPlan
+from cloudianapi.components.system import System
+from cloudianapi.components.tiering import Tiering
+from cloudianapi.components.usage import Usage
+from cloudianapi.components.user import User
+from cloudianapi.components.whitelist import Whitelist
 
-from cloudianapi.core.api import CloudianREST
+from cloudianapi.core.requestors import HttpRequestor
 
 
 class CloudianAPIClient(object):
@@ -48,21 +48,21 @@ class CloudianAPIClient(object):
         self._key = key
 
         # CloudianAPIClient has a private REST manager:
-        self._rest_client = CloudianREST(self._url,
-                                         self._port,
-                                         self._api_user,
-                                         self._key)
+        self._requestor = HttpRequestor(self._url,
+                                        self._port,
+                                        self._api_user,
+                                        self._key)
 
         # CloudianAPIClient has components:
-        self.billing = Billing(self._rest_client)
-        self.bppolicy = BucketPolicy(self._rest_client)
-        self.group = Group(self._rest_client)
-        self.monitor = Monitor(self._rest_client)
-        self.qos = Qos(self._rest_client)
-        self.ratingPlan = RatingPlan(self._rest_client)
-        self.system = System(self._rest_client)
-        self.tiering = Tiering(self._rest_client)
-        self.usage = Usage(self._rest_client)
-        self.user = User(self._rest_client)
-        self.whitelist = Whitelist(self._rest_client)
+        self.billing = Billing(self._requestor)
+        self.bppolicy = BucketPolicy(self._requestor)
+        self.group = Group(self._requestor)
+        self.monitor = Monitor(self._requestor)
+        self.qos = Qos(self._requestor)
+        self.ratingPlan = RatingPlan(self._requestor)
+        self.system = System(self._requestor)
+        self.tiering = Tiering(self._requestor)
+        self.usage = Usage(self._requestor)
+        self.user = User(self._requestor)
+        self.whitelist = Whitelist(self._requestor)
 

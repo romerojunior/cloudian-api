@@ -22,7 +22,7 @@
 
 #      Romero Galiza Jr. - rgaliza@schubergphilis.com
 
-from cloudianapi.core.api import BaseComponent
+from cloudianapi.core.basecomponent import BaseComponent
 
 
 class Monitor(BaseComponent):

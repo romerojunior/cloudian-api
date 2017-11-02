@@ -22,7 +22,6 @@
 
 #      Romero Galiza Jr. - rgaliza@schubergphilis.com
 
-
 import requests
 import urllib3
 
@@ -86,5 +85,3 @@ class HttpRequestor(object):
         except urllib3.exceptions.ConnectionError as err:
             print("Error: " + str(err.message))
             exit(1)
-
-
