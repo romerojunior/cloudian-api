@@ -1,5 +1,5 @@
-WiP: Cloudian™ Rest API Client
-========================
+WiP: Cloudian™ REST Admin API Client
+====================================
 
 Example
 -----
