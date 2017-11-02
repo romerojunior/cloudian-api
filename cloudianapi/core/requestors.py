@@ -30,24 +30,27 @@ class HttpRequestor(object):
 
     """Defines a basic REST API client to be extended by components."""
 
-    def __init__(self, admin_url, port, api_user, api_key):
+    def __init__(self, url, port, user, key, warn=False):
         """ CloudianREST constructor, requires information regarding the admin
         API server provided by Cloudian Inc. Hyperstore.
 
-        :param admin_url:   the admin url configured on your hyperstore cluster
-        :type admin_url:    str
+        :param url:         the admin url configured on your hyperstore cluster
+        :type url:          str
         :param port:        TCP port configured to listen HTTP/S requests
         :type port:         int
-        :param api_user:    admin API user configured on your cluster
-        :type api_user:     str
-        :param api_key:     API key configured on your cluster
-        :type api_key:      str
+        :param user:        admin API user configured on your cluster
+        :type user:         str
+        :param key:         API key configured on your cluster
+        :type key:          str
+        :param warn:        if set to True, warnings are enabled
+        :type warn:         bool
         :rtype:             HttpRequestor
         """
-        self.admin_url = admin_url
+        self.url = url
         self.port = port
-        self.api_user = api_user
-        self.api_key = api_key
+        self.user = user
+        self.key = key
+        self.warn = warn
 
     def http_get(self, call_str):
         """ Builds a request and fetches its response from the admin API
@@ -57,18 +60,20 @@ class HttpRequestor(object):
         :type call_str:     str
         :rtype:             str
         """
-        urllib3.disable_warnings()
+        if not self.warn:
+            urllib3.disable_warnings()
+
+        api_call = '{url}:{port}/{call}'.format(
+            url=self.url, port=self.port, call=call_str
+        )
 
         try:
-            api_call = '{admin_url}:{port}/{call}'.format(
-                admin_url=self.admin_url,
-                port=self.port,
-                call=call_str
-            )
 
-            response = requests.get(api_call, verify=False,
-                                    auth=(self.api_user, self.api_key)
-                                    )
+            response = requests.get(
+                api_call, verify=False, auth=(
+                    self.user, self.key
+                )
+            )
 
             if response.status_code == 200:
                 return response.json()
