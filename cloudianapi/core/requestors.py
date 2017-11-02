@@ -27,7 +27,7 @@ import requests
 import urllib3
 
 
-class CloudianREST(object):
+class HttpRequestor(object):
 
     """Defines a basic REST API client to be extended by components."""
 
@@ -43,7 +43,7 @@ class CloudianREST(object):
         :type api_user:     str
         :param api_key:     API key configured on your cluster
         :type api_key:      str
-        :rtype:             CloudianREST
+        :rtype:             HttpRequestor
         """
         self.admin_url = admin_url
         self.port = port
@@ -88,32 +88,3 @@ class CloudianREST(object):
             exit(1)
 
 
-class BaseComponent(object):
-
-    base_url = None
-
-    def __init__(self, rest_client):
-        self.rest_client = rest_client
-
-    def __getattr__(self, endpoint):
-
-        def handler(**kwargs):
-            return self._inner_getattr(endpoint, **kwargs)
-        return handler
-
-    def _inner_getattr(self, endpoint, **kwargs):
-
-        api_call = '/{base_url}/{endpoint}'.format(
-            base_url=self.__class__.base_url,
-            endpoint=endpoint
-        )
-
-        for index, (key, value) in enumerate(kwargs.items()):
-
-            symbol = '&' if index else '?'
-
-            api_call += '{symbol}{key}={value}'.format(
-                symbol=symbol, key=key, value=value
-            )
-
-        return self.rest_client.http_get(api_call)
