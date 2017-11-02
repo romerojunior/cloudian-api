@@ -23,7 +23,6 @@
 #      Romero Galiza Jr. - rgaliza@schubergphilis.com
 
 import requests
-import urllib3
 
 
 class HttpRequestor(object):
@@ -61,32 +60,30 @@ class HttpRequestor(object):
         :rtype:             str
         """
         if not self.warn:
-            urllib3.disable_warnings()
+            requests.urllib3.disable_warnings()
 
         api_call = '{url}:{port}/{call}'.format(
             url=self.url, port=self.port, call=call_str
         )
 
         try:
-
             response = requests.get(
                 api_call, verify=False, auth=(
                     self.user, self.key
                 )
             )
-
             if response.status_code == 200:
-                return response.json()
-
+                try:
+                    return response.json()
+                except ValueError:
+                    # GET /system/version
+                    return response.text
             else:
-                print("Error: Request response code %s (%s)" %
-                      (response.status_code, response.reason))
-                exit(1)
-
-        except ValueError as err:
-            print("Error: " + str(err.message))
-            exit(1)
-
-        except urllib3.exceptions.ConnectionError as err:
-            print("Error: " + str(err.message))
+                return {
+                    'reason': response.reason,
+                    'status_code': response.status_code,
+                    'url': response.request.url
+                }
+        except requests.exceptions.ConnectionError as err:
+            print(str(err.message))
             exit(1)
