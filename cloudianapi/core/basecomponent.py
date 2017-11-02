@@ -39,21 +39,27 @@ class BaseComponent(object):
         self.requestor = requestor
 
     def __getattr__(self, endpoint):
-        # closure:
-        def handler(**kwargs):
-            return self._inner_getattr(endpoint, **kwargs)
+        # closure, expects keyword argument unpacking:
+        def handler(**parameters):
+            return self._inner_getattr(endpoint, **parameters)
         return handler
 
-    def _inner_getattr(self, endpoint, **kwargs):
+    def _inner_getattr(self, endpoint, **parameters):
         """ Fetches the API endpoints and all URL parameters in order to
-        construct a valid Cloudian Admin API call. """
+        construct a valid Cloudian Admin API call.
 
+        :param endpoint:    the endpoint path (without parameters)
+        :type endpoint:     str
+        :param parameters:  URL query parameters
+        :type parameters:   dict
+        :rtype:             BaseComponent
+        """
         api_call = '/{base_url}/{endpoint}'.format(
             base_url=self.__class__.base_url,
             endpoint=endpoint
         )
 
-        for index, (key, value) in enumerate(kwargs.items()):
+        for index, (key, value) in enumerate(parameters.items()):
             # builds a valid API call with proper URL syntax:
             symbol = '&' if index else '?'
 
