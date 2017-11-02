@@ -28,9 +28,10 @@ Work in Progress
 This python package is a working in progress, still not suitable for production.
 
 
-Fix me
-------
+Fix me & To do
+--------------
 
-* parent calls such as: client.monitor() are broken
-* if any API call doesn't return a json the code breaks
-* support to HTTP methods POST and DELETE need to be implemented
+* Parent calls such as client.monitor() are broken, needs attention;
+* If any API call doesn't return a json the code breaks, needs proper handling;
+* HTTP support to methods POST and DELETE needs to be implemented;
+* Better error handling on module <cloudianapi.core.requestors> is needed.
