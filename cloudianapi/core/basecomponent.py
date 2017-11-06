@@ -45,9 +45,9 @@ class BaseComponent(object):
         :type parameters:   dict
         :rtype:             BaseComponent
         """
-        api_call = self._build_request(**parameters)
+        request = self._build_request(**parameters)
 
-        return self.requestor.http_get(api_call)
+        return self.requestor.request(**request)
 
     def __getattr__(self, endpoint):
         # closure, expects keyword argument unpacking:
@@ -64,9 +64,9 @@ class BaseComponent(object):
         :type parameters:   dict
         :rtype:             BaseComponent
         """
-        api_call = self._build_request(endpoint, **parameters)
+        request = self._build_request(endpoint, **parameters)
 
-        return self.requestor.http_get(api_call)
+        return self.requestor.request(**request)
 
     def _build_request(self, endpoint='', **parameters):
         """ Builds a proper API request.
@@ -75,24 +75,34 @@ class BaseComponent(object):
         :type endpoint:     str
         :param parameters:  URL query parameters
         :type parameters:   dict
-        :rtype:             str
+        :rtype:             dict
         """
+
+        request = dict()
+
+        if 'data' in parameters:
+            request['data'] = parameters['data']
+
+        if 'json' in parameters:
+            request['json'] = parameters['json']
 
         base_url = self.__class__.base_url
 
         if endpoint:
-            api_call = '{base_url}/{endpoint}'.format(
+            url = '{base_url}/{endpoint}'.format(
                 base_url=base_url,
                 endpoint=endpoint
             )
         else:
-            api_call = '{base_url}'.format(
+            url = '{base_url}'.format(
                 base_url=base_url,
             )
 
         for index, (key, value) in enumerate(parameters.items()):
-            api_call += '{symbol}{key}={value}'.format(
+            url += '{symbol}{key}={value}'.format(
                 symbol='&' if index else '?', key=key, value=value
             )
 
-        return api_call
+        request['url'] = url
+
+        return request
