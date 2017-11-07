@@ -44,4 +44,4 @@ All Cloudian™ Hyperstore Admin API endpoints are dynamically mapped through `c
 Fix me & To do
 --------------
 
-* HTTP support to methods POST and DELETE needs to be implemented;
+* Test across multiple platforms;
