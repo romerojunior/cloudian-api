@@ -78,13 +78,11 @@ class BaseComponent(object):
         :rtype:             dict
         """
 
-        request = dict()
-
-        if 'data' in parameters:
-            request['data'] = parameters['data']
-
-        if 'json' in parameters:
-            request['json'] = parameters['json']
+        request = {
+            'method': parameters.pop('method', 'GET'),
+            'data': parameters.pop('data', None),
+            'json': parameters.pop('json', None)
+        }
 
         base_url = self.__class__.base_url
 
