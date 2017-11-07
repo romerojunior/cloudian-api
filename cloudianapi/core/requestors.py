@@ -51,7 +51,7 @@ class HttpRequestor(object):
         self.key = key
         self.warn = warn
 
-    def request(self, url, data=None, json=None, method='get'):
+    def request(self, url, data=None, json=None, method='GET'):
         """ Builds a request and fetches its response from the admin API
         server, returns a JSON encoded string. SSL verification is disabled.
         Simply put: this method works as a request.requests() wrapper.
