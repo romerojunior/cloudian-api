@@ -25,13 +25,12 @@
 from setuptools import setup, find_packages
 
 base_url = 'https://github.com/romerojunior/cloudian-api'
-version_tag = '0.2.0'
+version_tag = '0.2.1'
 
 setup(
     name='cloudianapi',
     version=version_tag,
     description='Non-official Cloudian (TM) REST Admin API Client',
-    long_description=open('README.md').read(),
     author='Romero Galiza Jr',
     license='LICENSE.txt',
     author_email='rgaliza@schubergphilis.com',
