@@ -1,5 +1,5 @@
-WiP: Cloudian™ REST Admin API Client
-====================================
+Cloudian™ REST Admin API Client
+===============================
 
 Example
 -----
@@ -25,7 +25,8 @@ print client.user.list(groupId="CustomerABC", userType="all", userStatus="active
 Work in Progress
 ----------------
 
-This python package is a working in progress, although suitable for testing environments and production, it still has limited features (check **Fix Me & To do**). Feel free to contribute by either making a PR or creating a new issue.
+This python package is a working in progress, although suitable for testing environments and production, it still has 
+limited features (check **Fix Me & To do**). Feel free to contribute by either making a PR or creating a new issue.
 
 How to install
 --------------
@@ -39,9 +40,13 @@ pip install cloudianapi
 How it works
 ------------
 
-All Cloudian™ Hyperstore Admin API endpoints are dynamically mapped through `cloudianapi.components` package in a object-oriented approach, however, currently only the HTTP GET method is supported (DELETE and POST methods are expected to be implemented soon). Each call, such as `client.monitor.nodelist()`, returns a JSON compatible dictionary that could easily be parsed to any data structure. All API calls parameters (such as nodeId, region, userType and so on) are case sensitive, check your Cloudian™ Admin API documentation for more details.
+All Cloudian™ Hyperstore Admin API endpoints are dynamically mapped through `cloudianapi.components` package in a 
+object-oriented approach. Each call, such as `client.monitor.nodelist()`, returns a JSON compatible dictionary that can
+easily be parsed to any data structure. All API calls parameters (such as nodeId, region, userType and so on) are case 
+sensitive, check your Cloudian™ Admin API documentation for more details. By default all calls are HTTP GET requests, 
+check the examples file for a broader overview on how to use this package.
 
 Fix me & To do
 --------------
 
-* Test across multiple platforms;
+* Test across multiple platforms
