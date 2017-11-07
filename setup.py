@@ -32,10 +32,11 @@ setup(
     version=version_tag,
     description='Non-official Cloudian (TM) REST Admin API Client',
     author='Romero Galiza Jr',
-    license='LICENSE.txt',
+    license='Apache License Version 2.0',
     author_email='rgaliza@schubergphilis.com',
     url=base_url,
     download_url=base_url + '/archive/' + version_tag + '.tar.gz',
     packages=find_packages(),
-    keywords=['cloudian', 'api-client']
+    keywords=['cloudian', 'api-client'],
+    platforms=['Any']
 )

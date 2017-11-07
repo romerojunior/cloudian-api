@@ -65,4 +65,3 @@ class CloudianAPIClient(object):
         self.usage = Usage(self._requestor)
         self.user = User(self._requestor)
         self.whitelist = Whitelist(self._requestor)
-
