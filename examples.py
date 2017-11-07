@@ -53,7 +53,7 @@ if __name__ == "__main__":
     print client.system.license()
 
     # Print details about a given group:
-    print client.group(groupId='ABC')
+    print client.group(groupId="ABC")
 
     # Print a list of active users from a given user group:
     print client.user.list(groupId="ABC", userType="all", userStatus="active")
@@ -64,3 +64,15 @@ if __name__ == "__main__":
             value=client.monitor.host(nodeId=node)['diskUsedKb']['value'],
             node=node
         )
+
+    # Deleting user Cartman from a given group:
+    print client.user(method="DELETE", userId="Cartman", groupId="ABC")
+
+    # Adding user Butters to a given group:
+    payload = {
+        "userId": "Butters",
+        "groupId": "ABC",
+        "userType": "User"
+    }
+
+    print client.user(method='PUT', json=payload)
