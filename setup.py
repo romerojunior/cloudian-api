@@ -31,7 +31,6 @@ setup(
     name='cloudianapi',
     version=version_tag,
     description='Non-official Cloudian (TM) REST Admin API Client',
-    long_description=open('README.md').read(),
     author='Romero Galiza Jr',
     license='LICENSE.txt',
     author_email='rgaliza@schubergphilis.com',
