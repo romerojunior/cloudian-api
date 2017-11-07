@@ -51,26 +51,38 @@ class HttpRequestor(object):
         self.key = key
         self.warn = warn
 
-    def http_get(self, call_str):
+    def request(self, url, data=None, json=None, method='GET'):
         """ Builds a request and fetches its response from the admin API
-        server, returns a JSON encoded string.
+        server, returns a JSON encoded string. SSL verification is disabled.
+        Simply put: this method works as a request.requests() wrapper.
 
-        :param call_str:    the endpoint with all parameters to GET request
-        :type call_str:     str
+        :param url:    the endpoint with all parameters to GET request
+        :type url:     str
+        :param method:      HTTP method (GET, POST, HEAD, DELETE, etc)
+        :type method:       str
+        :param data:        file-like object to send in the body of the request
+        :type data:         dict
+        :param json:        json data to send in the body of the request
+        :type json:         dict
         :rtype:             str
         """
         if not self.warn:
             requests.urllib3.disable_warnings()
 
         api_call = '{url}:{port}/{call}'.format(
-            url=self.url, port=self.port, call=call_str
+            url=self.url, port=self.port, call=url
         )
 
         try:
-            response = requests.get(
-                api_call, verify=False, auth=(
+            response = requests.request(
+                verify=False,
+                method=method,
+                url=api_call,
+                data=data,
+                json=json,
+                auth=(
                     self.user, self.key
-                )
+                ),
             )
             if response.status_code == 200:
                 try:
