@@ -84,15 +84,8 @@ class BaseComponent(object):
             'json': parameters.pop('json', None)
         }
 
-        if endpoint:
-            url = '{base_url}/{endpoint}'.format(
-                base_url=self.__class__.base_url,
-                endpoint=endpoint
-            )
-        else:
-            url = '{base_url}'.format(
-                base_url=self.__class__.base_url,
-            )
+        # url = {base_url}[/{endpoint}]
+        url = '/'.join(filter(None, (self.__class__.base_url, endpoint)))
 
         for index, (key, value) in enumerate(parameters.items()):
             url += '{symbol}{key}={value}'.format(
