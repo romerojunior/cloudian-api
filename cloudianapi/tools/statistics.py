@@ -22,28 +22,52 @@
 
 #      Romero Galiza Jr. - rgaliza@schubergphilis.com
 
-from numpy import median, mean
+""" This is not part of the Admin API, but it incorporates additional tooling
+to support statistical analysis of monitored data within a cluster, data center
+or node """
 
 
-def mean_disk_deviation(node_monitor):
-    """ Gets the monitoring output of a given node and returns the deviation on
-    storage usage for each disk.
+def get_hs_used_kb(node):
+    """ Receives a node monitor JSON string and returns a list containing the
+    used disk space in KB for each hyperstore disk.
 
-    :param node_monitor:    an iterable object
-    :type node_monitor:     dict
-    :rtype:                 int
+    :param node:            an iterable object
+    :type node:             dict
+    :rtype:                 list
     """
 
-    ft = (lambda x: True if 'HS' in x['storageUse'] else False)
+    if 'disksInfo' not in node:
+        raise TypeError('Unsupported input.')
+
+    # filter function to select only HyperStore disks:
+    f = (lambda n: True if 'HS' in n['storageUse'] else False)
 
     hs_disks = filter(
-        ft, (disk for disk in node_monitor['disksInfo']['disks'])
+        f, (d for d in node['disksInfo']['disks'])
     )
 
-    hs_usage = [abs(int(disk['diskUsedKb'])) for disk in hs_disks]
+    return [abs(int(disk['diskUsedKb'])) for disk in hs_disks]
 
-    m = int(median(hs_usage))
 
-    deviation = [abs(kb_used - m) for kb_used in hs_usage]
+def disk_avg_abs_deviation(node):
+    """ Returns the average absolute deviation for a given set of disks of a
+    given node based entirely on used capacity (expressed in KB).
 
-    return int(mean(deviation))
+    Particularly useful if you want to visualize the average difference
+    between all disks in a given node. The closer the result is to zero the
+    better (less deviation = balanced usage).
+
+    :param node:            an iterable object
+    :type node:             dict
+    :rtype:                 int
+    """
+    try:
+        disk_usage = get_hs_used_kb(node)
+    except TypeError:
+        return 0
+
+    mean = (sum(disk_usage) / len(disk_usage))
+
+    deviation = [abs(kb_used - mean) for kb_used in disk_usage]
+
+    return sum(deviation)/len(deviation)
