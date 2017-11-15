@@ -69,7 +69,12 @@ class BaseComponent(object):
         return self.requestor.request(**request)
 
     def _build_request(self, endpoint='', **parameters):
-        """ Builds a proper API request.
+        """ Builds a data structure that contains a properly built URL (from
+        the optionals endpoint argument and unpacked parameters), the HTTP
+        request method, a data key and a json key.
+
+            URL example:
+                base_url/endpoint?param1=value1&param2=value2
 
         :param endpoint:    the endpoint path (without parameters)
         :type endpoint:     str
@@ -84,15 +89,8 @@ class BaseComponent(object):
             'json': parameters.pop('json', None)
         }
 
-        if endpoint:
-            url = '{base_url}/{endpoint}'.format(
-                base_url=self.__class__.base_url,
-                endpoint=endpoint
-            )
-        else:
-            url = '{base_url}'.format(
-                base_url=self.__class__.base_url,
-            )
+        # url = {base_url}[/{endpoint}]
+        url = '/'.join(filter(None, (self.__class__.base_url, endpoint)))
 
         for index, (key, value) in enumerate(parameters.items()):
             url += '{symbol}{key}={value}'.format(

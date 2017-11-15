@@ -27,3 +27,16 @@ from cloudianapi.core.basecomponent import BaseComponent
 
 class User(BaseComponent):
     base_url = 'user'
+
+    def __init__(self, requestor):
+        BaseComponent.__init__(self, requestor)
+        self.credentials = Credentials(requestor)
+        self.password = Password(requestor)
+
+
+class Credentials(BaseComponent):
+    base_url = User.base_url + '/credentials'
+
+
+class Password(BaseComponent):
+    base_url = User.base_url + '/password'
