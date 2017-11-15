@@ -27,3 +27,11 @@ from cloudianapi.core.basecomponent import BaseComponent
 
 class Usage(BaseComponent):
     base_url = 'usage'
+
+    def __init__(self, requestor):
+        BaseComponent.__init__(self, requestor)
+        self.repair = Repair(requestor)
+
+
+class Repair(BaseComponent):
+    base_url = Usage.base_url + '/repair'
