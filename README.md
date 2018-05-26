@@ -5,6 +5,8 @@ Example
 -----
 
 ```
+from cloudianapi.client import CloudianAPIClient
+
 client = CloudianAPIClient(
     url=None
     user=None,
