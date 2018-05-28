@@ -73,29 +73,25 @@ class HttpRequestor(object):
             url=self.url, port=self.port, call=url
         )
 
-        try:
-            response = requests.request(
-                verify=False,
-                method=method,
-                url=api_call,
-                data=data,
-                json=json,
-                auth=(
-                    self.user, self.key
-                ),
-            )
-            if response.status_code == 200:
-                try:
-                    return response.json()
-                except ValueError:
-                    # GET /system/version
-                    return response.text
-            else:
-                return {
-                    'reason': response.reason,
-                    'status_code': response.status_code,
-                    'url': response.request.url
-                }
-        except requests.exceptions.ConnectionError as err:
-            print(str(err.message))
-            exit(1)
+        response = requests.request(
+            verify=False,
+            method=method,
+            url=api_call,
+            data=data,
+            json=json,
+            auth=(
+                self.user, self.key
+            ),
+        )
+        if response.status_code == 200:
+            try:
+                return response.json()
+            except ValueError:
+                # GET /system/version
+                return response.text
+        else:
+            return {
+                'reason': response.reason,
+                'status_code': response.status_code,
+                'url': response.request.url
+            }
