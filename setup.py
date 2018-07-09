@@ -25,7 +25,7 @@
 from setuptools import setup, find_packages
 
 base_url = 'https://github.com/romerojunior/cloudian-api'
-version_tag = '0.2.3'
+version_tag = '0.2.4'
 
 setup(
     name='cloudianapi',
